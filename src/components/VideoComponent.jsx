@@ -5,10 +5,10 @@ function VideoComponent(props) {
         <>
             {
                 props != '' ?
-                    <li id='video_component' className="video_component px-2 py-2 w-[100%] sm:w-[50%] md:w-[33.33%] lg:w-[25%] xl:w-[20%] 2xl:w-[16.66%] cursor-pointer relative">
+                    <li id='video_component' className="video_component px-2 py-2 w-[100%] sm:w-[50%] md:w-[33.33%] lg:w-[25%] 2xl:w-[20%] cursor-pointer relative">
                         <div className="video_component_card hover:shadow-xl rounded-xl bg-white">
                             <div className="">
-                                <img src={props.videothumbnail} alt="" className='rounded-xl h-[160px] w-full' />
+                                <img src={props.videothumbnail} alt="" className='video_card_image rounded-xl h-[160px] w-full' />
                             </div>
                             <div className="flex flex-col justify-center mt-2 pb-4 px-2">
                                 <div className="flex flex-row justify-start">
@@ -17,10 +17,10 @@ function VideoComponent(props) {
                                     </div>
                                     <div className="mt-2 w-full relative">
                                         <h4 className='text-base font-semibold video-title w-[85%]'>{props.videotitle}</h4>
+                                        <button className="absolute right-2 top-1">
+                                            <svg viewBox="0 0 24 24" className='w-[20px]'><g><path d="M12,16.5c0.83,0,1.5,0.67,1.5,1.5s-0.67,1.5-1.5,1.5s-1.5-0.67-1.5-1.5S11.17,16.5,12,16.5z M10.5,12 c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5s-0.67-1.5-1.5-1.5S10.5,11.17,10.5,12z M10.5,6c0,0.83,0.67,1.5,1.5,1.5 s1.5-0.67,1.5-1.5S12.83,4.5,12,4.5S10.5,5.17,10.5,6z"></path></g></svg>
+                                        </button>
                                         <div className="flex flex-col">
-                                            <button className="absolute right-2 top-1">
-                                                <svg viewBox="0 0 24 24" className='w-[20px]'><g><path d="M12,16.5c0.83,0,1.5,0.67,1.5,1.5s-0.67,1.5-1.5,1.5s-1.5-0.67-1.5-1.5S11.17,16.5,12,16.5z M10.5,12 c0,0.83,0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5s-0.67-1.5-1.5-1.5S10.5,11.17,10.5,12z M10.5,6c0,0.83,0.67,1.5,1.5,1.5 s1.5-0.67,1.5-1.5S12.83,4.5,12,4.5S10.5,5.17,10.5,6z"></path></g></svg>
-                                            </button>
                                             <div className="">
                                                 <a href="" className='text-xs text-[#606060] hover:text-[#222] font-medium flex flex-row'>
                                                     <div className="mr-1">{props.channelname}</div>

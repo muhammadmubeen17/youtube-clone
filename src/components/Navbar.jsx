@@ -1,21 +1,82 @@
 import React from 'react';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import {  } from '@fortawesome/free-solid-svg-icons'
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import profilePic from '../assets/images/profile.jpg'
+import NotificationsMenu from './NotificationsMenu';
+import UploadDropdown from './UploadDropdown';
+
+/**
+ * Hook that alerts clicks outside of the passed ref
+ */
+function useOutsideAlerter(ref, hideshowMenu, sethideshowMenu) {
+    useEffect(() => {
+        /**
+         * Alert if clicked on outside of element
+         */
+        function handleClickOutside(event) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                sethideshowMenu("hide");
+            }
+        }
+        // Bind the event listener
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [ref]);
+}
+
 
 const Navbar = (props) => {
 
     const humburger = useRef();
+    const [hideshowUploadMenu, sethideshowUploadMenu] = useState("hide");
+    const [hideshowNotificationsMenu, sethideshowNotificationsMenu] = useState("hide");
+    const uploadRef = useRef(null);
+    const notificationRef = useRef(null);
+    // useOutsideAlerter(uploadRef, hideshowUploadMenu, sethideshowUploadMenu);
 
     const showSidebar = () => {
-
         props.setsidebarstate(humburger.current.id);
         if (humburger.current.id == "expand") {
             humburger.current.id = 'collapse';
         } else {
             humburger.current.id = 'expand';
         }
+    }
+    // Upload Dropdown
+    const showUploadsMenu = () => {
+        if (hideshowUploadMenu == "hide") {
+            sethideshowUploadMenu("show");
+            sethideshowNotificationsMenu("hide");
+        } else {
+            sethideshowUploadMenu("hide");
+        }
+        console.log(hideshowUploadMenu);
+    }
+    // Notifications Dropdown
+    const showNotificationsMenu = () => {
+        if (hideshowNotificationsMenu == "hide") {
+            sethideshowNotificationsMenu("show");
+            sethideshowUploadMenu("hide");
+        } else {
+            sethideshowNotificationsMenu("hide");
+        }
+        console.log(hideshowNotificationsMenu);
+    }
+
+    const [searchicon, setsearchicon] = useState("hidden");
+    const [searchbar, setsearchbar] = useState("");
+
+    const showsearchicon = () => {
+        setsearchicon("");
+        setsearchbar("pl-10");
+    }
+    const hidesearchicon = () => {
+        setsearchicon("hidden");
+        setsearchbar("");
     }
 
     return (
@@ -49,14 +110,13 @@ const Navbar = (props) => {
                         </svg>
                     </div>
                 </li>
-                <li className="flex flex-row justify-center" style={{ flex: "0 1 648px" }}>
+                <li className="flex flex-row justify-center w-[50%]">
                     <form className='w-full' >
-                        <label htmlFor="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                        <div className="relative flex justify-center">
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <div id='search_block' className="relative flex justify-center">
+                            <div id='search_icon' className={"absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none " + searchicon}>
                                 <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             </div>
-                            <input type="search" id="search" className="block w-full px-3 py-1 pl-10 text-sm text-gray-900 border rounded-bl-[50px] rounded-tl-[50px] bg-white focus:outline-none " placeholder="Search" />
+                            <input onFocus={showsearchicon} onBlur={hidesearchicon} type="search" id="search_bar" className={"block w-full px-3 py-1 text-sm text-gray-900 border rounded-bl-[50px] rounded-tl-[50px] bg-white focus:outline-none " + searchbar} placeholder="Search" />
                             <button type="submit" className="text-black px-5 rounded-tr-[50px] rounded-br-[50px] bg-[#f8f8f8] hover:bg-[#f0f0f0]">
                                 <svg viewBox="0 0 24 24" className='w-[25px]'><g><path d="M20.87,20.17l-5.59-5.59C16.35,13.35,17,11.75,17,10c0-3.87-3.13-7-7-7s-7,3.13-7,7s3.13,7,7,7c1.75,0,3.35-0.65,4.58-1.71 l5.59,5.59L20.87,20.17z M10,16c-3.31,0-6-2.69-6-6s2.69-6,6-6s6,2.69,6,6S13.31,16,10,16z"></path></g></svg>
                             </button>
@@ -69,11 +129,23 @@ const Navbar = (props) => {
                     </form>
                 </li>
                 <li className='flex flex-row justify-end pr-2'>
-                    <div className="flex flex-col justify-center px-2 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
-                        <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M18,8.83V5H2v14h16v-5.83L22,15V7L18,8.83z M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z"></path></g></svg>
+                    <div className="relative">
+                        <div onClick={showUploadsMenu} className="flex flex-col justify-center px-2 mr-5 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
+                            <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M18,8.83V5H2v14h16v-5.83L22,15V7L18,8.83z M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z"></path></g></svg>
+                        </div>
+                        {
+                            hideshowUploadMenu == 'show' ?
+                                <UploadDropdown wrapperRef={uploadRef} useOutsideAlerter={useOutsideAlerter} hideshowUploadMenu={hideshowUploadMenu} sethideshowUploadMenu={sethideshowUploadMenu} /> : <></>
+                        }
                     </div>
-                    <div className="flex flex-col justify-center px-2 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
-                        <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M10,20h4c0,1.1-0.9,2-2,2S10,21.1,10,20z M20,17.35V19H4v-1.65l2-1.88v-5.15c0-2.92,1.56-5.22,4-5.98V3.96 c0-1.42,1.49-2.5,2.99-1.76C13.64,2.52,14,3.23,14,3.96l0,0.39c2.44,0.75,4,3.06,4,5.98v5.15L20,17.35z M19,17.77l-2-1.88v-5.47 c0-2.47-1.19-4.36-3.13-5.1c-1.26-0.53-2.64-0.5-3.84,0.03C8.15,6.11,7,7.99,7,10.42v5.47l-2,1.88V18h14V17.77z"></path></g></svg>
+                    <div className="relative">
+                        <div onClick={showNotificationsMenu} className="flex flex-col justify-center px-2 mr-5 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
+                            <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M10,20h4c0,1.1-0.9,2-2,2S10,21.1,10,20z M20,17.35V19H4v-1.65l2-1.88v-5.15c0-2.92,1.56-5.22,4-5.98V3.96 c0-1.42,1.49-2.5,2.99-1.76C13.64,2.52,14,3.23,14,3.96l0,0.39c2.44,0.75,4,3.06,4,5.98v5.15L20,17.35z M19,17.77l-2-1.88v-5.47 c0-2.47-1.19-4.36-3.13-5.1c-1.26-0.53-2.64-0.5-3.84,0.03C8.15,6.11,7,7.99,7,10.42v5.47l-2,1.88V18h14V17.77z"></path></g></svg>
+                        </div>
+                        {
+                            hideshowNotificationsMenu == 'show' ?
+                                <NotificationsMenu wrapperRef={notificationRef} useOutsideAlerter={useOutsideAlerter} hideshowNotificationsMenu={hideshowNotificationsMenu} sethideshowNotificationsMenu={sethideshowNotificationsMenu} /> : <></>
+                        }
                     </div>
                     <div className="flex flex-col justify-center p-2 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative">
                         <img src={profilePic} className='w-[25px] h-[25px] rounded-[50%]' alt="" />
