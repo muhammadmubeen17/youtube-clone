@@ -1,9 +1,9 @@
 import React from 'react';
 
-const UploadDropdown = ( props ) => {
-    props.useOutsideAlerter(props.wrapperRef, props.hideshowUploadMenu, props.sethideshowUploadMenu);
+const UploadDropdown = () => {
+
     return (
-        <div id='upload_dropdown' ref={props.wrapperRef} className='absolute top-10 left-0 z-[110] py-1 bg-white rounded-xl flex flex-row justify-center'>
+        <div id='upload_dropdown' className='absolute top-10 left-0 z-[110] py-1 bg-white rounded-xl flex flex-row justify-center'>
             <ul className='list-none flex flex-col justify-center w-[175px]'>
                 <li className='h-[40px] px-4 flex flex-row justify-start py-2 mb-1 cursor-pointer hover:bg-[#f2f2f2]'>
                     <svg viewBox="0 0 24 24" className='w-[25px]'><g><path d="M10,8l6,4l-6,4V8L10,8z M21,3v18H3V3H21z M20,4H4v16h16V4z"></path></g></svg>

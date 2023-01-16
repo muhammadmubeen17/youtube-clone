@@ -12,10 +12,10 @@ import videothumbnail8 from '../assets/images/thumbnail8.jpg'
 import videothumbnail9 from '../assets/images/thumbnail9.jpg'
 import videothumbnail10 from '../assets/images/thumbnail10.jpg'
 
-const NotificationsMenu = ( props ) => {
-    props.useOutsideAlerter(props.wrapperRef, props.hideshowNotificationsMenu, props.sethideshowNotificationsMenu);
+const NotificationsMenu = () => {
+
     return (
-        <div id='notifications_dropdown' ref={props.wrapperRef} className='fixed top-2 w-[35%] right-32 z-[110] py-1 bg-white rounded-xl flex flex-col justify-center'>
+        <div id='notifications_dropdown' className='fixed top-2 w-[35%] right-32 z-[110] py-1 bg-white rounded-xl flex flex-col justify-center'>
             <div className="flex flex-row justify-between px-3 py-1 border-b border-[rgba(0,0,0,0.1)]">
                 <div className="flex flex-col justify-center">
                     <h3>Notifications</h3>
@@ -26,7 +26,7 @@ const NotificationsMenu = ( props ) => {
                     </button>
                 </div>
             </div>
-            <ul id='notifications_list' className='list-none bg-white h-[89vh] overflow-y-scroll overflow-hidden'>
+            <ul id='notifications_list' className='list-none bg-white h-96 overflow-y-scroll overflow-hidden'>
                 <Notifications channellogo={channellogo} videothumbnail={videothumbnail1} videotitle="Learn HTML in 30 days, Must Watch" videouploadtime="1 minutes ago" />
                 <Notifications channellogo={channellogo} videothumbnail={videothumbnail2} videotitle="Learn CSS in 30 days, Must Watch" videouploadtime="2 minutes ago" />
                 <Notifications channellogo={channellogo} videothumbnail={videothumbnail3} videotitle="Learn JavaScript in 30 days, Must Watch" videouploadtime="3 minutes ago" />

@@ -6,37 +6,12 @@ import profilePic from '../assets/images/profile.jpg'
 import NotificationsMenu from './NotificationsMenu';
 import UploadDropdown from './UploadDropdown';
 
-/**
- * Hook that alerts clicks outside of the passed ref
- */
-function useOutsideAlerter(ref, hideshowMenu, sethideshowMenu) {
-    useEffect(() => {
-        /**
-         * Alert if clicked on outside of element
-         */
-        function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                sethideshowMenu("hide");
-            }
-        }
-        // Bind the event listener
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [ref]);
-}
-
-
 const Navbar = (props) => {
 
     const humburger = useRef();
     const [hideshowUploadMenu, sethideshowUploadMenu] = useState("hide");
     const [hideshowNotificationsMenu, sethideshowNotificationsMenu] = useState("hide");
-    const uploadRef = useRef(null);
-    const notificationRef = useRef(null);
-    // useOutsideAlerter(uploadRef, hideshowUploadMenu, sethideshowUploadMenu);
+
 
     const showSidebar = () => {
         props.setsidebarstate(humburger.current.id);
@@ -46,6 +21,8 @@ const Navbar = (props) => {
             humburger.current.id = 'expand';
         }
     }
+
+    
     // Upload Dropdown
     const showUploadsMenu = () => {
         if (hideshowUploadMenu == "hide") {
@@ -56,6 +33,7 @@ const Navbar = (props) => {
         }
         console.log(hideshowUploadMenu);
     }
+    
     // Notifications Dropdown
     const showNotificationsMenu = () => {
         if (hideshowNotificationsMenu == "hide") {
@@ -83,7 +61,7 @@ const Navbar = (props) => {
         <nav className='py-2 fixed top-0 left-0 right-0 bg-white z-50'>
             <ul className='px-2.5 list-none flex justify-between'>
                 <li className='flex flex-row justify-center '>
-                    <div className="flex flex-col justify-center">
+                    <div className="hidden md:flex flex-col justify-center">
                         <div id='expand' ref={humburger} onClick={showSidebar} className="w-[40px] h-[40px] rounded-[50%] hover:bg-[#f2f2f2] relative cursor-pointer">
                             <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path></g></svg>
                         </div>
@@ -110,7 +88,7 @@ const Navbar = (props) => {
                         </svg>
                     </div>
                 </li>
-                <li className="flex flex-row justify-center w-[50%]">
+                <li className="hidden md:flex flex-row justify-center w-[50%]">
                     <form className='w-full' >
                         <div id='search_block' className="relative flex justify-center">
                             <div id='search_icon' className={"absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none " + searchicon}>
@@ -129,23 +107,28 @@ const Navbar = (props) => {
                     </form>
                 </li>
                 <li className='flex flex-row justify-end pr-2'>
-                    <div className="relative">
+                    <div className="relative hidden md:block">
                         <div onClick={showUploadsMenu} className="flex flex-col justify-center px-2 mr-5 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
                             <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M18,8.83V5H2v14h16v-5.83L22,15V7L18,8.83z M14,13h-3v3H9v-3H6v-2h3V8h2v3h3V13z"></path></g></svg>
                         </div>
                         {
                             hideshowUploadMenu == 'show' ?
-                                <UploadDropdown wrapperRef={uploadRef} useOutsideAlerter={useOutsideAlerter} hideshowUploadMenu={hideshowUploadMenu} sethideshowUploadMenu={sethideshowUploadMenu} /> : <></>
+                                <UploadDropdown /> : <></>
                         }
                     </div>
-                    <div className="relative">
+                    <div className="relative hidden md:block">
                         <div onClick={showNotificationsMenu} className="flex flex-col justify-center px-2 mr-5 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative hover:bg-[#e0e0e0]">
                             <svg viewBox="0 0 24 24" className="w-[25px] absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]"><g><path d="M10,20h4c0,1.1-0.9,2-2,2S10,21.1,10,20z M20,17.35V19H4v-1.65l2-1.88v-5.15c0-2.92,1.56-5.22,4-5.98V3.96 c0-1.42,1.49-2.5,2.99-1.76C13.64,2.52,14,3.23,14,3.96l0,0.39c2.44,0.75,4,3.06,4,5.98v5.15L20,17.35z M19,17.77l-2-1.88v-5.47 c0-2.47-1.19-4.36-3.13-5.1c-1.26-0.53-2.64-0.5-3.84,0.03C8.15,6.11,7,7.99,7,10.42v5.47l-2,1.88V18h14V17.77z"></path></g></svg>
                         </div>
                         {
                             hideshowNotificationsMenu == 'show' ?
-                                <NotificationsMenu wrapperRef={notificationRef} useOutsideAlerter={useOutsideAlerter} hideshowNotificationsMenu={hideshowNotificationsMenu} sethideshowNotificationsMenu={sethideshowNotificationsMenu} /> : <></>
+                                <NotificationsMenu /> : <></>
                         }
+                    </div>
+                    <div className="flex flex-col justify-center mr-2 md:hidden">
+                        <button>
+                            <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
                     </div>
                     <div className="flex flex-col justify-center p-2 cursor-pointer w-[40px] h-[40px] rounded-[50%] relative">
                         <img src={profilePic} className='w-[25px] h-[25px] rounded-[50%]' alt="" />
